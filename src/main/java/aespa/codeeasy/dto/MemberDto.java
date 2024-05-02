@@ -1,13 +1,22 @@
 package aespa.codeeasy.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
 public class MemberDto {
+
     private String memberId;
+
+    @NotBlank(message = "닉네임 입력은 필수입니다.")
     private String nickname;
+
+    @Email(message = "유효하지 않은 이메일입니다.")
     private String email;
+
+    @NotBlank(message = "패스워드 입력은 필수입니다.")
     private String password;
 
     // 기본 생성자
