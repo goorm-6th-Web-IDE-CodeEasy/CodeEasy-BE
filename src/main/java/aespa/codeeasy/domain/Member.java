@@ -15,10 +15,11 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String memberId;
     private String nickname;
     private String email;
     private String password;
-    private String tier = "bronze"; // 티어 기본값 설정/
+    private String tier = "bronze"; // 티어 기본값 설정
 
 
 }
