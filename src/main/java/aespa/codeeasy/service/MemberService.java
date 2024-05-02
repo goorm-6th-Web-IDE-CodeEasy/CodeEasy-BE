@@ -13,7 +13,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public Member registerNerMemberAccount(MemberDto memberDto) {
+    public Member registerNewMemberAccount(MemberDto memberDto) {
         Member member = new Member();
         member.setMemberId(memberDto.getMemberId());
         member.setNickname(memberDto.getNickname());
