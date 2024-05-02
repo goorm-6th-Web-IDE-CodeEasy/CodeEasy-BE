@@ -59,3 +59,4 @@ public class MemberService {
         return memberRepository.save(member); // 회원 정보를 데이터베이스에 저장하고 저장된 엔티티를 반환
     }
 }
+
