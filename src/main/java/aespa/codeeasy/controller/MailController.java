@@ -1,13 +1,13 @@
 package aespa.codeeasy.controller;
 
 import aespa.codeeasy.dto.EmailCheckDto;
+import aespa.codeeasy.dto.EmailRequestDto;
 import aespa.codeeasy.service.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,8 +17,8 @@ public class MailController {
     private final MailService mailService;
 
     @PostMapping("/register/send-certification")
-    public ResponseEntity sendEmail(@RequestParam("email") String email) {
-        mailService.sendEmail(email);
+    public ResponseEntity sendEmail(@RequestBody EmailRequestDto emailRequestDto) {
+        mailService.sendEmail(emailRequestDto.getEmail());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
