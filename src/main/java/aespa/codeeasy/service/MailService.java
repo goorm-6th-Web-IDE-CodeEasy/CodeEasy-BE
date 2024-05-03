@@ -55,6 +55,7 @@ public class MailService {
         return message;
     }
     public void sendEmail(String email) {
-
+        MimeMessage message = createMail(email);
+        javaMailSender.send(message);
     }
 }
