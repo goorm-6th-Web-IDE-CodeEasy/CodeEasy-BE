@@ -1,5 +1,6 @@
 package aespa.codeeasy.service;
 
+import aespa.codeeasy.util.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMessage.RecipientType;
@@ -15,7 +16,8 @@ import org.springframework.stereotype.Service;
 public class MailService {
 
     private final JavaMailSender javaMailSender;
-    private static Integer certificationCode;
+    private final RedisUtil redisUtil;
+    private static String certificationCode;
 
     private void createCertificationCode() {
         int certificationCodeLength = 6;
@@ -27,7 +29,7 @@ public class MailService {
             builder.append(random.nextInt(10));
         }
 
-        certificationCode = Integer.parseInt(builder.toString());
+        certificationCode = builder.toString();
     }
 
     public MimeMessage createMail(String email) {
@@ -52,6 +54,9 @@ public class MailService {
             log.error("이메일 전송 관련 예외 발생. 수신 이메일: {}, 예외: {}", toMail, messagingException);
         }
 
+        // Redis에 해당 인증 코드 인증 시간 3분으로 설정
+        redisUtil.setDataExpire(certificationCode, toMail, 60 * 3L);
+
         return message;
     }
 
@@ -61,6 +66,12 @@ public class MailService {
     }
 
     public Boolean checkCertificationCode(String email, String certificationCode) {
-        return null;
+        if (redisUtil.getData(certificationCode) == null) {
+            return false;
+        } else if (redisUtil.getData(certificationCode).equals(email)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
