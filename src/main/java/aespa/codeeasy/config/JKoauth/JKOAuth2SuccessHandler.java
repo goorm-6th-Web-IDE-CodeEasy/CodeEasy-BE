@@ -1,6 +1,6 @@
 package aespa.codeeasy.config.JKoauth;
 
-import aespa.codeeasy.JKCookieUtil;
+import aespa.codeeasy.util.JKCookieUtil;
 import aespa.codeeasy.config.JKjwt.JKTokenProvider;
 import aespa.codeeasy.domain.Member;
 import aespa.codeeasy.domain.JKRefreshToken;

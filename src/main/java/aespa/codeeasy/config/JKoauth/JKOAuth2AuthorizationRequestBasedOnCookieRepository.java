@@ -1,6 +1,6 @@
 package aespa.codeeasy.config.JKoauth;
 
-import aespa.codeeasy.JKCookieUtil;
+import aespa.codeeasy.util.JKCookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
