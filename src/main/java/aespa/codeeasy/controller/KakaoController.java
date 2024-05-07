@@ -2,10 +2,10 @@ package aespa.codeeasy.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class KakaoController {
 
@@ -18,8 +18,8 @@ public class KakaoController {
     @GetMapping("/api/login/kakao")
     public String moveToKakaoLogin() {
         String location =
-                "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + client_id
-                        + "&redirect_uri=" + redirect_uri;
+                "https://kauth.kakao.com/oauth/authorize?response_type=code"
+                        + "&client_id=" + client_id + "&redirect_uri=" + redirect_uri;
         return "redirect:" + location;
     }
 }
