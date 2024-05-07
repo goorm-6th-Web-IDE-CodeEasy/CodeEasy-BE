@@ -33,7 +33,7 @@ public class KakaoUtil {
                 + "&client_id=" + client_id + "&redirect_uri=" + redirect_uri;
     }
 
-    public String getAccessToken(String code) {
+    public String getAccessToken(String code) throws JsonProcessingException {
         String accessToken = "";
         String refreshToken = "";
         String reqUrl = "https://kauth.kakao.com/oauth/token";
@@ -63,29 +63,26 @@ public class KakaoUtil {
 
         // 5. 응답으로 온 json 파싱
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            JsonNode root = mapper.readTree(response.getBody());
-            accessToken = root.path("access_token").asText();
-            refreshToken = root.path("refresh_token").asText();
-        } catch (JsonProcessingException jsonProcessingException) {
-            log.error("Json 파싱 관련 예외 발생. 예외: {}", jsonProcessingException);
-        }
+        JsonNode root = mapper.readTree(response.getBody());
+        accessToken = root.path("access_token").asText();
+        refreshToken = root.path("refresh_token").asText();
 
         return accessToken;
     }
 
-    public KakaoDto getUserInfoWithToken(String accessToken) {
+    public KakaoDto getUserInfoWithToken(String accessToken) throws JsonProcessingException {
         String nickname = "";
         String email = "";
         String reqUrl = "https://kapi.kakao.com/v2/user/me";
 
-        //HttpHeader 생성
+        //1. HttpHeader 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
 
+        //2. HttpHeader 담기
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
 
-        //HttpHeader 담기
+        //3. HTTP 요청하기
         RestTemplate rt = new RestTemplate();
         ResponseEntity<String> response = rt.exchange(
                 reqUrl,
@@ -94,20 +91,15 @@ public class KakaoUtil {
                 String.class
         );
 
-        // Response 데이터 파싱
+        //4. Response 데이터 파싱
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            JsonNode root = mapper.readTree(response.getBody());
+        JsonNode root = mapper.readTree(response.getBody());
 
-            JsonNode kakaoAccount = root.path("kakao_account");
-            JsonNode profile = kakaoAccount.path("profile");
+        JsonNode kakaoAccount = root.path("kakao_account");
+        JsonNode profile = kakaoAccount.path("profile");
 
-            email = kakaoAccount.path("email").asText(); // asText 사용, 없으면 빈 문자열 반환
-            nickname = profile.path("nickname").asText(); // asText 사용, 없으면 빈 문자열 반환
-
-        } catch (Exception exception) {
-            log.error("Json 파싱 관련 예외 발생. 예외: {}", exception);
-        }
+        email = kakaoAccount.path("email").asText(); // asText 사용, 없으면 빈 문자열 반환
+        nickname = profile.path("nickname").asText(); // asText 사용, 없으면 빈 문자열 반환
 
         return new KakaoDto(nickname, email);
     }
