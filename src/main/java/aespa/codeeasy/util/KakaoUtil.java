@@ -1,5 +1,6 @@
 package aespa.codeeasy.util;
 
+import aespa.codeeasy.dto.KakaoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,4 +74,41 @@ public class KakaoUtil {
         return accessToken;
     }
 
+    public KakaoDto getUserInfoWithToken(String accessToken) {
+        String nickname = "";
+        String email = "";
+        String reqUrl = "https://kapi.kakao.com/v2/user/me";
+
+        //HttpHeader 생성
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
+
+        //HttpHeader 담기
+        RestTemplate rt = new RestTemplate();
+        ResponseEntity<String> response = rt.exchange(
+                reqUrl,
+                HttpMethod.GET,
+                httpEntity,
+                String.class
+        );
+
+        // Response 데이터 파싱
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode root = mapper.readTree(response.getBody());
+
+            JsonNode kakaoAccount = root.path("kakao_account");
+            JsonNode profile = kakaoAccount.path("profile");
+
+            email = kakaoAccount.path("email").asText(); // asText 사용, 없으면 빈 문자열 반환
+            nickname = profile.path("nickname").asText(); // asText 사용, 없으면 빈 문자열 반환
+
+        } catch (Exception exception) {
+            log.error("Json 파싱 관련 예외 발생. 예외: {}", exception);
+        }
+
+        return new KakaoDto(nickname, email);
+    }
 }
