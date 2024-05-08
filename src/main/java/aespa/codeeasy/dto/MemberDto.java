@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 public class MemberDto {
 
-    private String memberId;
+    // private String memberId;
 
     @NotBlank(message = "닉네임 입력은 필수입니다.")
     private String nickname;
@@ -24,8 +24,13 @@ public class MemberDto {
     }
 
     // 모든 필드를 초기화하는 생성자
-    public MemberDto(String memberId, String nickname, String email, String password) {
-        this.memberId = memberId;
+//    public MemberDto(String memberId, String nickname, String email, String password) {
+//        this.memberId = memberId;
+//        this.nickname = nickname;
+//        this.email = email;
+//        this.password = password;
+//    }
+    public MemberDto(String nickname, String email, String password) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
