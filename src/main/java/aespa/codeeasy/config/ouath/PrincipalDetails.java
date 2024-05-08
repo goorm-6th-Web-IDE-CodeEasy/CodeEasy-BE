@@ -2,10 +2,12 @@ package aespa.codeeasy.config.ouath;
 
 import aespa.codeeasy.domain.Member;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class PrincipalDetails implements OAuth2User {
@@ -31,9 +33,12 @@ public class PrincipalDetails implements OAuth2User {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collet = new ArrayList<GrantedAuthority>();
-        collet.add(()-> member.getRole());
-        return collet;
+        List<GrantedAuthority> authorityList = new ArrayList<>();
+
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
+        authorityList.add(authority);
+
+        return authorityList;
     }
 
     @Override
