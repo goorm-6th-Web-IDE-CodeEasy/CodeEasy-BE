@@ -1,4 +1,4 @@
 package aespa.codeeasy.dto;
 
-public class CodeDto {
+public class ProblemDto {
 }
