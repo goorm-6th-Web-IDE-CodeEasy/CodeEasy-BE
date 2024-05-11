@@ -8,7 +8,7 @@ import aespa.codeeasy.model.Problem;
 import aespa.codeeasy.dto.FavoriteDTO;
 import aespa.codeeasy.repository.FavoriteRepository;
 import aespa.codeeasy.repository.MemberRepository;
-import aespa.codeeasy.repository.ProblemRepository;
+import aespa.codeeasy.repository.JKProblemRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
     private final MemberRepository memberRepository;
-    private final ProblemRepository problemRepository;
+    private final JKProblemRepository problemRepository;
     private final JwtService jwtService;
 
     // DTO 변환 메소드
