@@ -3,7 +3,8 @@ package aespa.codeeasy.service;
 import aespa.codeeasy.JKglobal.jwt.service.JwtService;
 import aespa.codeeasy.domain.Favorite;
 import aespa.codeeasy.domain.Member;
-import aespa.codeeasy.domain.Problem;
+//import aespa.codeeasy.domain.Problem;
+import aespa.codeeasy.model.Problem;
 import aespa.codeeasy.dto.FavoriteDTO;
 import aespa.codeeasy.repository.FavoriteRepository;
 import aespa.codeeasy.repository.MemberRepository;
@@ -32,7 +33,7 @@ public class FavoriteService {
         return new FavoriteDTO(
                 favorite.getId(),
                 favorite.getMember().getId(),
-                favorite.getProblem().getId()
+                favorite.getProblem().getProblemId()
         );
     }
 

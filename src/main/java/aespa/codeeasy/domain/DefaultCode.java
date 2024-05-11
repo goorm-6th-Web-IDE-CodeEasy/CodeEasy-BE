@@ -1,5 +1,6 @@
 package aespa.codeeasy.domain;
 
+import aespa.codeeasy.model.Problem;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,6 @@ public class DefaultCode {
     private String defaultCode; // 해당 언어의 기본 코드
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "problem_id")  // 외래 키 컬럼 이름 지정
+    @JoinColumn(name = "problemId")  // 외래 키 컬럼 이름 지정
     private Problem problem;  // Problem 엔티티에 대한 참조
 }

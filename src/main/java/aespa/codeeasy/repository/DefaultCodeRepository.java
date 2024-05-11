@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface DefaultCodeRepository extends JpaRepository<DefaultCode, Long> {
-    Optional<DefaultCode> findByProblemIdAndLanguage(Long problemId, String language);
+    //Optional<DefaultCode> findByProblemIdAndLanguage(Long problemId, String language);
+    Optional<DefaultCode> findByProblem_ProblemIdAndLanguage(Long problemId, String language);
+
 }

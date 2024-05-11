@@ -16,6 +16,6 @@ public class DefaultCodeService {
     private final DefaultCodeRepository defaultCodeRepository;
 
     public Optional<DefaultCode> getDefaultCodeByProblemIdAndLanguage(Long problemId, String language) {
-        return defaultCodeRepository.findByProblemIdAndLanguage(problemId, language);
+        return defaultCodeRepository.findByProblem_ProblemIdAndLanguage(problemId, language);
     }
 }
