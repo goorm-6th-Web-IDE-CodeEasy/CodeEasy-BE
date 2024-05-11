@@ -49,8 +49,8 @@ public class KakaoController {
 
     private boolean checkMemberRegistration(KakaoDto kakaoDto) {
         if (!memberService.isNicknameExists(kakaoDto.getNickname())) {
-            MemberDto memberDto = new MemberDto("", kakaoDto.getNickname(), kakaoDto.getEmail(), "");
-            memberService.registerNewMemberAccount(memberDto);
+//            MemberDto memberDto = new MemberDto("", kakaoDto.getNickname(), kakaoDto.getEmail(), "");
+//            memberService.registerNewMemberAccount(memberDto);
             return true;
         }
         return false;
