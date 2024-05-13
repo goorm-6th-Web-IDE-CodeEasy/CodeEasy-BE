@@ -4,8 +4,9 @@ import aespa.codeeasy.domain.CProblem;
 import aespa.codeeasy.dto.ProblemDto;
 import aespa.codeeasy.repository.CProblemRepository;
 import aespa.codeeasy.service.CProblemService;
-import jakarta.annotation.PostConstruct;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,11 +19,14 @@ public class CProblemController {
     private final CProblemRepository problemRepository;
 
     @GetMapping("/problem/{problemId}")
-    public ProblemDto getProblem(@PathVariable Long problemId) {
-        return problemService.getProblem(problemId);
+    public ResponseEntity<ProblemDto> getProblem(@PathVariable("problemId") Long problemId) {
+        Optional<ProblemDto> optionalProblemDto = problemService.getProblem(problemId);
+        return optionalProblemDto
+                .map(problemDto -> ResponseEntity.ok().body(problemDto))
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostConstruct
+    //    @PostConstruct
     public void init() {
         CProblem problem = new CProblem();
         problem.setProblemTitle("A+B");

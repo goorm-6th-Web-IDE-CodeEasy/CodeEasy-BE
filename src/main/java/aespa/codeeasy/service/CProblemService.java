@@ -13,8 +13,22 @@ public class CProblemService {
 
     private final CProblemRepository problemRepository;
 
-    public ProblemDto getProblem(Long problemId) {
-        Optional<CProblem> problem = problemRepository.findById(problemId);
-        return null;
+    public Optional<ProblemDto> getProblem(Long problemId) {
+        Optional<CProblem> optionalProblem = problemRepository.findById(problemId);
+        return optionalProblem.map(this::mapToDto);
     }
+
+    private ProblemDto mapToDto(CProblem cProblem) {
+        ProblemDto problemDto = new ProblemDto();
+        problemDto.setProblemTitle(cProblem.getProblemTitle());
+        problemDto.setProblemContent(cProblem.getProblemContent());
+        problemDto.setProblemInputContent(cProblem.getProblemInputContent());
+        problemDto.setProblemOutputContent(cProblem.getProblemOutputContent());
+        problemDto.setAlgorithm(cProblem.getAlgorithm());
+        problemDto.setTier(cProblem.getTier());
+        problemDto.setTimeLimit(cProblem.getTimeLimit());
+        problemDto.setMemoryLimit(cProblem.getMemoryLimit());
+        return problemDto;
+    }
+
 }
