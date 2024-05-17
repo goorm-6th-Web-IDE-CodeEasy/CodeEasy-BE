@@ -26,5 +26,11 @@ public class CProblem {
 
     private Long timeLimit;
     private Long memoryLimit;
-    
+
+    private String inputParameters;
+    private String outputParameter;
+
+    private String basicInputTestCase;
+    private String basicOutputTestCase;
+
 }
