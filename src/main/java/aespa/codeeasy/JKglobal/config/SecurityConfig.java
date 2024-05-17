@@ -21,6 +21,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 인증은 CustomJsonUsernamePasswordAuthenticationFilter에서 authenticate()로 인증된 사용자로 처리
@@ -60,6 +68,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(corsCustomizer -> corsCustomizer.configurationSource(corsConfigurationSource()))
+                .headers(headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -85,6 +96,26 @@ public class SecurityConfig {
                 .addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class) // LogoutFilter 이후에 사용자 정의 필터 추가
                 .addFilterBefore(jwtAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class) // UsernamePasswordAuthenticationFilter 이전에 JWT 처리 필터 추가
                 .build();
+    }
+
+
+    // CORS 설정을 위한 CorsConfiguration 반환
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:8080")); // 여기에 허용할 오리진 추가
+        configuration.setAllowedMethods(Collections.singletonList("*")); // 허용할 HTTP 메소드 설정
+
+        configuration.setAllowCredentials(true); // 쿠키를 넘기기 위해 사용
+//        configuration.setMaxAge(3600L); // 브라우저 캐싱 시간(초)
+
+        configuration.setAllowedHeaders(Collections.singletonList("*")); // 허용할 헤더 설정
+        configuration.addExposedHeader("Authorization"); // 클라이언트가 접근할 수 있도록 헤더 노출
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Authorization-refresh"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 적용
+        return source;
     }
 
     @Bean

@@ -16,9 +16,9 @@ public class Editor {
         this.code = code;
     }
 
-    public static Editor of(ProblemAnswerRequestDTO problemAnswerRequestDTO) {
-        return Editor.builder()
-                .code(problemAnswerRequestDTO.getCode())
-                .build();
-    }
+//    public static Editor of(ProblemAnswerRequestDTO problemAnswerRequestDTO) {
+//        return Editor.builder()
+//                .code(problemAnswerRequestDTO.getCode())
+//                .build();
+//    }
 }

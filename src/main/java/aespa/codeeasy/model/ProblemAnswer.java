@@ -44,10 +44,10 @@ public class ProblemAnswer {
         this.problem = problem;
     }
 
-    public static ProblemAnswer of(ProblemAnswerRequestDTO problemAnswerRequestDTO) {
-        return ProblemAnswer.builder()
-                .code(problemAnswerRequestDTO.getCode())
-                .language(problemAnswerRequestDTO.getLanguage())
-                .build();
-    }
+//    public static ProblemAnswer of(ProblemAnswerRequestDTO problemAnswerRequestDTO) {
+//        return ProblemAnswer.builder()
+//                .code(problemAnswerRequestDTO.getCode())
+//                .language(problemAnswerRequestDTO.getLanguage())
+//                .build();
+//    }
 }
