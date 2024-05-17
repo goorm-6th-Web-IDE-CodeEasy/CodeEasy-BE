@@ -9,8 +9,8 @@ import aespa.codeeasy.codeGenerator.JavaScriptCodeGenerator;
 import aespa.codeeasy.codeGenerator.PythonCodeGenerator;
 import aespa.codeeasy.domain.CProblem;
 import aespa.codeeasy.domain.TestCase;
+import aespa.codeeasy.dto.CProblemDto;
 import aespa.codeeasy.dto.CompileResponseDto;
-import aespa.codeeasy.dto.ProblemDto;
 import aespa.codeeasy.repository.CProblemRepository;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,22 +25,22 @@ public class CProblemService {
 
     private final CProblemRepository problemRepository;
 
-    public Optional<ProblemDto> getProblem(Long problemId) {
+    public Optional<CProblemDto> getProblem(Long problemId) {
         Optional<CProblem> optionalProblem = problemRepository.findById(problemId);
         return optionalProblem.map(this::mapToDto);
     }
 
-    private ProblemDto mapToDto(CProblem cProblem) {
-        ProblemDto problemDto = new ProblemDto();
-        problemDto.setProblemTitle(cProblem.getProblemTitle());
-        problemDto.setProblemContent(cProblem.getProblemContent());
-        problemDto.setProblemInputContent(cProblem.getProblemInputContent());
-        problemDto.setProblemOutputContent(cProblem.getProblemOutputContent());
-        problemDto.setAlgorithm(cProblem.getAlgorithm());
-        problemDto.setTier(cProblem.getTier());
-        problemDto.setTimeLimit(cProblem.getTimeLimit());
-        problemDto.setMemoryLimit(cProblem.getMemoryLimit());
-        return problemDto;
+    private CProblemDto mapToDto(CProblem cProblem) {
+        CProblemDto CProblemDto = new CProblemDto();
+        CProblemDto.setProblemTitle(cProblem.getProblemTitle());
+        CProblemDto.setProblemContent(cProblem.getProblemContent());
+        CProblemDto.setProblemInputContent(cProblem.getProblemInputContent());
+        CProblemDto.setProblemOutputContent(cProblem.getProblemOutputContent());
+        CProblemDto.setAlgorithm(cProblem.getAlgorithm());
+        CProblemDto.setTier(cProblem.getTier());
+        CProblemDto.setTimeLimit(cProblem.getTimeLimit());
+        CProblemDto.setMemoryLimit(cProblem.getMemoryLimit());
+        return CProblemDto;
     }
 
     public void gradeProblem(Long problemId, String code, String language) {
