@@ -33,6 +33,7 @@ public class Member {
 
     private String refreshToken; // 리프레시 토큰
 
+    private int solved; // 해결한 문제들
     // 유저 권한 설정 메소드
     public void authorizeUser() {
         this.role = Role.USER;
@@ -54,5 +55,9 @@ public class Member {
 
     public void updateRefreshToken(String updateRefreshToken) {
         this.refreshToken = updateRefreshToken;
+    }
+
+    public void setName(String newNickname) {
+        this.nickname = newNickname;
     }
 }
