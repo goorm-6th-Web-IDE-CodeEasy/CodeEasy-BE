@@ -49,17 +49,26 @@ public class JwtService {
     /**
      * AccessToken 생성 메소드
      */
-    public String createAccessToken(String email) {
+//    public String createAccessToken(String email) {
+//        Date now = new Date();
+//        return JWT.create() // JWT 토큰을 생성하는 빌더 반환
+//                .withSubject(ACCESS_TOKEN_SUBJECT) // JWT의 Subject 지정 -> AccessToken이므로 AccessToken
+//                .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료 시간 설정
+//
+//                //클레임으로는 저희는 email 하나만 사용합니다.
+//                //추가적으로 식별자나, 이름 등의 정보를 더 추가하셔도 됩니다.
+//                //추가하실 경우 .withClaim(클래임 이름, 클래임 값) 으로 설정해주시면 됩니다
+//                .withClaim(EMAIL_CLAIM, email)
+//                .sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용, application-jwt.yml에서 지정한 secret 키로 암호화
+//    }
+    public String createAccessToken(Long userId, String email) {
         Date now = new Date();
-        return JWT.create() // JWT 토큰을 생성하는 빌더 반환
+        return JWT.create()
                 .withSubject(ACCESS_TOKEN_SUBJECT) // JWT의 Subject 지정 -> AccessToken이므로 AccessToken
                 .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료 시간 설정
-
-                //클레임으로는 저희는 email 하나만 사용합니다.
-                //추가적으로 식별자나, 이름 등의 정보를 더 추가하셔도 됩니다.
-                //추가하실 경우 .withClaim(클래임 이름, 클래임 값) 으로 설정해주시면 됩니다
-                .withClaim(EMAIL_CLAIM, email)
-                .sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용, application-jwt.yml에서 지정한 secret 키로 암호화
+                .withClaim("userId", userId)
+                .withClaim("email", email)
+                .sign(Algorithm.HMAC512(secretKey));
     }
 
     /**
@@ -134,6 +143,18 @@ public class JwtService {
                     .asString());
         } catch (Exception e) {
             log.error("액세스 토큰이 유효하지 않습니다.");
+            return Optional.empty();
+        }
+    }
+
+    public Optional<Long> extractUserId(String accessToken) {
+        try {
+            return Optional.of(JWT.require(Algorithm.HMAC512(secretKey))
+                    .build()
+                    .verify(accessToken)
+                    .getClaim("userId").asLong());
+        } catch (Exception e) {
+            log.error("액세스 토큰이 유효하지 않습니다.", e);
             return Optional.empty();
         }
     }

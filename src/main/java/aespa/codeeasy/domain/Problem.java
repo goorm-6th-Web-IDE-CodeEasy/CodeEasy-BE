@@ -2,6 +2,9 @@ package aespa.codeeasy.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.Getter;
 
 @Getter
