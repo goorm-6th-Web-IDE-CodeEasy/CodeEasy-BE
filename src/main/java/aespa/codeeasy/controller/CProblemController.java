@@ -45,4 +45,15 @@ public class CProblemController {
                     .body("Internal Server Error: " + e.getMessage());
         }
     }
+
+    @PatchMapping("/problem/{problemId}/grade")
+    public ResponseEntity gradeProblem(@PathVariable("problemId") Long problemId,
+                                       @RequestBody CompileRequestDto compileRequestDto) {
+
+        String code = compileRequestDto.getCode();
+        String language = compileRequestDto.getLanguage();
+        problemService.gradeProblem(problemId, code, language);
+
+        return ResponseEntity.ok().body("good");
+    }
 }

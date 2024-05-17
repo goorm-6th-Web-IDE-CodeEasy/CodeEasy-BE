@@ -8,6 +8,7 @@ import aespa.codeeasy.codeGenerator.JavaCodeGenerator;
 import aespa.codeeasy.codeGenerator.JavaScriptCodeGenerator;
 import aespa.codeeasy.codeGenerator.PythonCodeGenerator;
 import aespa.codeeasy.domain.CProblem;
+import aespa.codeeasy.domain.TestCase;
 import aespa.codeeasy.dto.CompileResponseDto;
 import aespa.codeeasy.dto.ProblemDto;
 import aespa.codeeasy.repository.CProblemRepository;
@@ -40,6 +41,30 @@ public class CProblemService {
         problemDto.setTimeLimit(cProblem.getTimeLimit());
         problemDto.setMemoryLimit(cProblem.getMemoryLimit());
         return problemDto;
+    }
+
+    public void gradeProblem(Long problemId, String code, String language) {
+        //코드 만들기
+        String allCode = makeCode(problemId, code, language);
+
+        //시간 제한 가져오기
+        Long timeLimit = problemRepository.findTimeLimitById(problemId);
+
+        //테스트 케이스 리스트 가져오기
+        List<TestCase> testCases = problemRepository.findTestCasesByProblemId(problemId);
+        int testCaseCount = testCases.size();
+
+        //반복문 돌면서 테스트 케이스 실행하기
+        for (int index = 0; index < testCaseCount; index++) {
+            TestCase testCase = testCases.get(index);
+            String rawInputTestCase = testCase.getInputTestCase();
+            String[] inputTestCase = rawInputTestCase.split(",");
+            String outputTestCase = testCase.getOutputTestCase();
+
+
+        }
+        //실행하면서 결과 저장하기
+
     }
 
     public CompileResponseDto runProblem(Long problemId, String code, String language)

@@ -1,6 +1,8 @@
 package aespa.codeeasy.repository;
 
 import aespa.codeeasy.domain.CProblem;
+import aespa.codeeasy.domain.TestCase;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +27,7 @@ public interface CProblemRepository extends JpaRepository<CProblem, Long> {
 
     @Query("SELECT c.timeLimit FROM CProblem c WHERE c.id = :problemId")
     Long findTimeLimitById(@Param("problemId") Long problemId);
+
+    @Query("SELECT t FROM TestCase t WHERE t.problem.id = :problemId")
+    List<TestCase> findTestCasesByProblemId(@Param("problemId") Long problemId);
 }
