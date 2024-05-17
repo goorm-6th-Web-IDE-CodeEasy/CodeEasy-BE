@@ -103,13 +103,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:8080")); // 여기에 허용할 오리진 추가
-        configuration.setAllowedMethods(Collections.singletonList("*")); // 허용할 HTTP 메소드 설정
-
+        configuration.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:5173")); // 여기에 허용할 오리진 추가
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메소드 설정
+        configuration.setAllowedHeaders(Arrays.asList("*")); // 허용할 헤더 설정
         configuration.setAllowCredentials(true); // 쿠키를 넘기기 위해 사용
-//        configuration.setMaxAge(3600L); // 브라우저 캐싱 시간(초)
-
-        configuration.setAllowedHeaders(Collections.singletonList("*")); // 허용할 헤더 설정
         configuration.addExposedHeader("Authorization"); // 클라이언트가 접근할 수 있도록 헤더 노출
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Authorization-refresh"));
 
@@ -117,6 +114,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 적용
         return source;
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
