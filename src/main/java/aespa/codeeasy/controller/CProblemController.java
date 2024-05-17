@@ -1,8 +1,8 @@
 package aespa.codeeasy.controller;
 
+import aespa.codeeasy.dto.CProblemDto;
 import aespa.codeeasy.dto.CompileRequestDto;
 import aespa.codeeasy.dto.CompileResponseDto;
-import aespa.codeeasy.dto.ProblemDto;
 import aespa.codeeasy.service.CProblemService;
 import java.io.IOException;
 import java.util.Optional;
@@ -21,10 +21,10 @@ public class CProblemController {
     private final CProblemService problemService;
 
     @GetMapping("/problem/{problemId}")
-    public ResponseEntity<ProblemDto> getProblem(@PathVariable("problemId") Long problemId) {
-        Optional<ProblemDto> optionalProblemDto = problemService.getProblem(problemId);
+    public ResponseEntity<CProblemDto> getProblem(@PathVariable("problemId") Long problemId) {
+        Optional<CProblemDto> optionalProblemDto = problemService.getProblem(problemId);
         return optionalProblemDto
-                .map(problemDto -> ResponseEntity.ok().body(problemDto))
+                .map(CProblemDto -> ResponseEntity.ok().body(CProblemDto))
                 .orElse(ResponseEntity.notFound().build());
     }
 

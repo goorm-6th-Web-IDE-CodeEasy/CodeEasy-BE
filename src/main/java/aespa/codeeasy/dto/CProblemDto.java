@@ -3,7 +3,7 @@ package aespa.codeeasy.dto;
 import lombok.Data;
 
 @Data
-public class ProblemDto {
+public class CProblemDto {
     private String problemTitle;
     private String problemContent;
     private String problemInputContent;
