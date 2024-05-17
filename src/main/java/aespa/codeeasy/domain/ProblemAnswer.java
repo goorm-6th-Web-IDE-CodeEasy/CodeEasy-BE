@@ -1,10 +1,10 @@
-package aespa.codeeasy.model;
+package aespa.codeeasy.domain;
 
-import aespa.codeeasy.domain.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -26,6 +26,8 @@ public class ProblemAnswer {
     @JoinColumn(name = "problem_id")
     private Problem problem;
 
+    private LocalDate date;
+
     public void modifyCode(String code) {
         this.code = code;
     }
@@ -44,10 +46,10 @@ public class ProblemAnswer {
         this.problem = problem;
     }
 
-    public static ProblemAnswer of(ProblemAnswerRequestDTO problemAnswerRequestDTO) {
-        return ProblemAnswer.builder()
-                .code(problemAnswerRequestDTO.getCode())
-                .language(problemAnswerRequestDTO.getLanguage())
-                .build();
-    }
+//    public static ProblemAnswer of(ProblemAnswerRequestDto problemAnswerRequestDto) {
+//        return ProblemAnswer.builder()
+//                .code(problemAnswerRequestDto.getCode())
+//                .language(problemAnswerRequestDto.getLanguage())
+//                .build();
+//    }
 }

@@ -1,4 +1,4 @@
-package aespa.codeeasy.model;
+package aespa.codeeasy.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -29,5 +29,13 @@ public class Problem {
         this.restriction = restriction;
         this.inputOutputExample = inputOutputExample;
         this.problemRank = problemRank;
+    }
+
+    public Long getId() {
+        return null;
+    }
+
+    public String getDifficulty() {
+        return null;
     }
 }

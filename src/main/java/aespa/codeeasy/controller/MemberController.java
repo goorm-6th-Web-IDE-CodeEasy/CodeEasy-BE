@@ -9,11 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
+
+    @GetMapping("/register")
+    public ResponseEntity<?> getRegisterMember() {
+        return ResponseEntity.ok("register 페이지 입니다.");
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerMember(@RequestBody @Valid MemberDto memberDto) {
@@ -25,22 +33,28 @@ public class MemberController {
         }
     }
 
-//    @GetMapping("/id-check")
-//    public ResponseEntity<?> checkMemberId(@RequestParam String memberId) {
-//        boolean exists = memberService.isMemberIdExists(memberId);
-//        if (exists) {
-//            return ResponseEntity.status(409).body("이미 존재하는 아이디입니다.");
-//        }
-//        return ResponseEntity.ok("사용 가능한 아이디 입니다.");
-//    }
+    @PostMapping("/id-check")
+    public ResponseEntity<?> checkMemberId(@RequestParam Long memberId) {
+        boolean exists = memberService.isMemberIdExists(memberId);
+        Map<String, String> response = new HashMap<>();
+        if (exists) {
+            response.put("message", "이미 존재하는 아이디입니다.");
+            return ResponseEntity.status(409).body(response);
+        }
+        response.put("message", "사용 가능한 아이디 입니다.");
+        return ResponseEntity.ok("사용 가능한 아이디 입니다.");
+    }
 
-    @GetMapping("/nickname-check")
+    @PostMapping("/nickname-check")
     public ResponseEntity<?> checkNickname(@RequestParam String nickname) {
         boolean exists = memberService.isNicknameExists(nickname);
+        Map<String, String> response = new HashMap<>();
         if (exists) {
-            return ResponseEntity.status(409).body("이미 존재하는 닉네임입니다.");
+            response.put("message", "이미 존재하는 닉네임입니다.");
+            return ResponseEntity.status(409).body(response);
         }
-        return ResponseEntity.ok("사용 가능한 닉네임 입니다.");
+        response.put("message", "사용 가능한 닉네임 입니다.");
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/jwt-test")
