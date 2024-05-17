@@ -1,6 +1,5 @@
 package aespa.codeeasy.domain;
 
-import aespa.codeeasy.model.Problem;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,10 +1,7 @@
 package aespa.codeeasy.domain;
 
-import aespa.codeeasy.model.Problem;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.ZonedDateTime;
 
 @Entity
 @NoArgsConstructor

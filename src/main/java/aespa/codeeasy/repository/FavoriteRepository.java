@@ -2,7 +2,7 @@ package aespa.codeeasy.repository;
 
 import aespa.codeeasy.domain.Favorite;
 import aespa.codeeasy.domain.Member;
-import aespa.codeeasy.model.Problem;
+import aespa.codeeasy.domain.Problem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
