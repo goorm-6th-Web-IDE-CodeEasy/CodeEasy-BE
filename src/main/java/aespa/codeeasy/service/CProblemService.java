@@ -43,7 +43,9 @@ public class CProblemService {
         return CProblemDto;
     }
 
-    public void gradeProblem(Long problemId, String code, String language) {
+    // 리팩토링 및 메서드 추출 필요 (나중에...)
+    public CompileResponseDto gradeProblem(Long problemId, String code, String language)
+            throws IOException, InterruptedException {
         //코드 만들기
         String allCode = makeCode(problemId, code, language);
 
@@ -54,17 +56,44 @@ public class CProblemService {
         List<TestCase> testCases = problemRepository.findTestCasesByProblemId(problemId);
         int testCaseCount = testCases.size();
 
+        List<String> statusList = new ArrayList<>();
+        List<String> dataList = new ArrayList<>();
+
+        int correctCount = 0;
+
+        CompileResponseDto compileResponseDto = new CompileResponseDto(testCaseCount, correctCount, statusList,
+                dataList);
+
         //반복문 돌면서 테스트 케이스 실행하기
+        //실행하면서 결과 저장하기
         for (int index = 0; index < testCaseCount; index++) {
             TestCase testCase = testCases.get(index);
             String rawInputTestCase = testCase.getInputTestCase();
-            String[] inputTestCase = rawInputTestCase.split(",");
+            String[] inputTestCase = splitParameter(rawInputTestCase);
             String outputTestCase = testCase.getOutputTestCase();
 
+            ProjectResult projectResult = FileExecute.executeFile(allCode, language, inputTestCase, timeLimit);
+            String projectStatus = projectResult.getStatus();
+            String codeResult = projectResult.getData();
 
+            if (projectStatus.equals("executed")) {
+                statusList.add(projectStatus);
+                if (outputTestCase.equals(codeResult)) {
+                    correctCount++;
+                    dataList.add("correct answer.");
+                } else {
+                    dataList.add("wrong answer.");
+                }
+
+            } else {
+                statusList.add(projectStatus);
+                dataList.add(codeResult);
+            }
         }
-        //실행하면서 결과 저장하기
 
+        compileResponseDto.setCorrectCount(correctCount);
+
+        return compileResponseDto;
     }
 
     public CompileResponseDto runProblem(Long problemId, String code, String language)
@@ -120,7 +149,7 @@ public class CProblemService {
 
     private String[] getBasicInputTestCase(Long problemId) {
         String basicInputTestCaseString = problemRepository.findBasicInputTestCaseById(problemId).get();
-        String[] basicInputTestCase = basicInputTestCaseString.split(",");
+        String[] basicInputTestCase = splitParameter(basicInputTestCaseString);
         return basicInputTestCase;
     }
 
@@ -152,12 +181,16 @@ public class CProblemService {
 
     private String[] getInputParameters(Long problemId) {
         String inputParametersOptional = problemRepository.findInputParametersById(problemId).get();
-        String[] inputParameters = inputParametersOptional.split(",");
+        String[] inputParameters = splitParameter(inputParametersOptional);
         return inputParameters;
     }
 
     private String getOutputParameter(Long problemId) {
         return problemRepository.findOutputParameterById(problemId).get();
+    }
+
+    private String[] splitParameter(String parameter) {
+        return parameter.split(",");
     }
 
 }
