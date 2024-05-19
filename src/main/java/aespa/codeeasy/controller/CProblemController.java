@@ -1,5 +1,6 @@
 package aespa.codeeasy.controller;
 
+import aespa.codeeasy.dto.BasicCodeDto;
 import aespa.codeeasy.dto.CProblemDto;
 import aespa.codeeasy.dto.CompileRequestDto;
 import aespa.codeeasy.dto.CompileResponseDto;
@@ -20,6 +21,12 @@ public class CProblemController {
 
     private final CProblemService problemService;
 
+    @GetMapping("/problem/{problemId}/default")
+    public ResponseEntity getBasicCode(@PathVariable("problemId") Long problemId) {
+        BasicCodeDto basicCodeDto = problemService.getBasicCode(problemId);
+        return ResponseEntity.ok().body(basicCodeDto);
+    }
+
     @GetMapping("/problem/{problemId}")
     public ResponseEntity<CProblemDto> getProblem(@PathVariable("problemId") Long problemId) {
         Optional<CProblemDto> optionalProblemDto = problemService.getProblem(problemId);
@@ -31,9 +38,11 @@ public class CProblemController {
     @PatchMapping("/problem/{problemId}/run")
     public ResponseEntity runProblem(@PathVariable("problemId") Long problemId,
                                      @RequestBody CompileRequestDto compileRequestDto) {
+
+        String code = compileRequestDto.getCode();
+        String language = compileRequestDto.getLanguage();
         try {
-            CompileResponseDto compileResponseDto = problemService.runProblem(problemId, compileRequestDto.getCode(),
-                    compileRequestDto.getLanguage());
+            CompileResponseDto compileResponseDto = problemService.runProblem(problemId, code, language);
             return ResponseEntity.ok().body(compileResponseDto);
         } catch (IOException e) {
             return ResponseEntity
@@ -52,8 +61,17 @@ public class CProblemController {
 
         String code = compileRequestDto.getCode();
         String language = compileRequestDto.getLanguage();
-        problemService.gradeProblem(problemId, code, language);
-
-        return ResponseEntity.ok().body("good");
+        try {
+            CompileResponseDto compileResponseDto = problemService.gradeProblem(problemId, code, language);
+            return ResponseEntity.ok().body(compileResponseDto);
+        } catch (IOException e) {
+            return ResponseEntity
+                    .status(500) // 상태 코드를 500으로 설정
+                    .body("Internal Server Error: " + e.getMessage());
+        } catch (InterruptedException e) {
+            return ResponseEntity
+                    .status(500) // 상태 코드를 500으로 설정
+                    .body("Internal Server Error: " + e.getMessage());
+        }
     }
 }

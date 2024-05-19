@@ -14,4 +14,7 @@ public class CProblemDto {
 
     private Long timeLimit;
     private Long memoryLimit;
+
+    private String basicInputTestCase;
+    private String basicOutputTestCase;
 }

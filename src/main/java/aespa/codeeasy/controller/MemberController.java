@@ -1,16 +1,20 @@
 package aespa.codeeasy.controller;
 
 import aespa.codeeasy.domain.Member;
+import aespa.codeeasy.dto.ApiResponseDto;
 import aespa.codeeasy.dto.MemberDto;
+import aespa.codeeasy.dto.NicknameDto;
 import aespa.codeeasy.service.MemberService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +37,7 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/id-check")
+    @GetMapping("/id-check")
     public ResponseEntity<?> checkMemberId(@RequestParam Long memberId) {
         boolean exists = memberService.isMemberIdExists(memberId);
         Map<String, String> response = new HashMap<>();
@@ -45,16 +49,19 @@ public class MemberController {
         return ResponseEntity.ok("사용 가능한 아이디 입니다.");
     }
 
-    @PostMapping("/nickname-check")
-    public ResponseEntity<?> checkNickname(@RequestParam String nickname) {
+    @GetMapping("/register/nickname-check")
+    public ResponseEntity checkNickname(@RequestParam("nickname") String nickname) {
         boolean exists = memberService.isNicknameExists(nickname);
-        Map<String, String> response = new HashMap<>();
+        NicknameDto nicknameDto = new NicknameDto();
+        ApiResponseDto apiResponseDto = new ApiResponseDto();
+        apiResponseDto.setData(nicknameDto);
         if (exists) {
-            response.put("message", "이미 존재하는 닉네임입니다.");
-            return ResponseEntity.status(409).body(response);
+            nicknameDto.setAvailable(false);
+            return ResponseEntity.ok().body(apiResponseDto);
         }
-        response.put("message", "사용 가능한 닉네임 입니다.");
-        return ResponseEntity.ok(response);
+        nicknameDto.setAvailable(true);
+        return ResponseEntity.ok().body(apiResponseDto);
+
     }
 
     @GetMapping("/jwt-test")

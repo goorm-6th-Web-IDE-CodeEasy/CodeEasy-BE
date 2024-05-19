@@ -66,6 +66,8 @@ public class MailService {
     }
 
     public Boolean checkCertificationCode(String email, String certificationCode) {
+        System.out.println(redisUtil.getData(certificationCode));
+        System.out.println(email);
         if (redisUtil.getData(certificationCode) == null) {
             return false;
         } else if (redisUtil.getData(certificationCode).equals(email)) {
