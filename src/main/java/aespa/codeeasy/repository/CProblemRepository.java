@@ -1,5 +1,6 @@
 package aespa.codeeasy.repository;
 
+import aespa.codeeasy.domain.BasicCode;
 import aespa.codeeasy.domain.CProblem;
 import aespa.codeeasy.domain.TestCase;
 import java.util.List;
@@ -30,4 +31,7 @@ public interface CProblemRepository extends JpaRepository<CProblem, Long> {
 
     @Query("SELECT t FROM TestCase t WHERE t.problem.id = :problemId")
     List<TestCase> findTestCasesByProblemId(@Param("problemId") Long problemId);
+
+    @Query("SELECT bc FROM CProblem cp JOIN cp.basicCode bc WHERE cp.id = :problemId")
+    BasicCode findBasicCodeByProblemId(@Param("problemId") Long problemId);
 }

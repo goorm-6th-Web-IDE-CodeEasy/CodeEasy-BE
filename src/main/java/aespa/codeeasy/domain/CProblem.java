@@ -1,11 +1,17 @@
 package aespa.codeeasy.domain;
 
+import aespa.codeeasy.domain.type.Algorithm;
+import aespa.codeeasy.domain.type.Tier;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,8 +30,11 @@ public class CProblem {
     private String problemInputContent;
     private String problemOutputContent;
 
-    private String algorithm;
-    private String tier;
+    @Enumerated(EnumType.STRING)
+    private Algorithm algorithm;
+
+    @Enumerated(EnumType.STRING)
+    private Tier tier;
 
     private Long timeLimit;
     private Long memoryLimit;
@@ -38,5 +47,9 @@ public class CProblem {
 
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TestCase> testCases;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "basic_code_id")
+    private BasicCode basicCode;
 
 }
