@@ -7,8 +7,10 @@ import aespa.codeeasy.codeGenerator.CppCodeGenerator;
 import aespa.codeeasy.codeGenerator.JavaCodeGenerator;
 import aespa.codeeasy.codeGenerator.JavaScriptCodeGenerator;
 import aespa.codeeasy.codeGenerator.PythonCodeGenerator;
+import aespa.codeeasy.domain.BasicCode;
 import aespa.codeeasy.domain.CProblem;
 import aespa.codeeasy.domain.TestCase;
+import aespa.codeeasy.dto.BasicCodeDto;
 import aespa.codeeasy.dto.CProblemDto;
 import aespa.codeeasy.dto.CompileResponseDto;
 import aespa.codeeasy.repository.CProblemRepository;
@@ -25,12 +27,26 @@ public class CProblemService {
 
     private final CProblemRepository problemRepository;
 
-    public Optional<CProblemDto> getProblem(Long problemId) {
-        Optional<CProblem> optionalProblem = problemRepository.findById(problemId);
-        return optionalProblem.map(this::mapToDto);
+    public BasicCodeDto getBasicCode(Long problemId) {
+        BasicCode basicCode = problemRepository.findBasicCodeByProblemId(problemId);
+        return mapToBasicCodeDto(basicCode);
     }
 
-    private CProblemDto mapToDto(CProblem cProblem) {
+    private BasicCodeDto mapToBasicCodeDto(BasicCode basicCode) {
+        BasicCodeDto basicCodeDto = new BasicCodeDto();
+        basicCodeDto.setJava(basicCode.getJavaBasicCode());
+        basicCodeDto.setCpp(basicCode.getCppBasicCode());
+        basicCodeDto.setPython(basicCode.getPythonBasicCode());
+        basicCodeDto.setJavascript(basicCode.getJavaScriptBasicCode());
+        return basicCodeDto;
+    }
+
+    public Optional<CProblemDto> getProblem(Long problemId) {
+        Optional<CProblem> optionalProblem = problemRepository.findById(problemId);
+        return optionalProblem.map(this::mapToCProblemDto);
+    }
+
+    private CProblemDto mapToCProblemDto(CProblem cProblem) {
         CProblemDto CProblemDto = new CProblemDto();
         CProblemDto.setProblemTitle(cProblem.getProblemTitle());
         CProblemDto.setProblemContent(cProblem.getProblemContent());

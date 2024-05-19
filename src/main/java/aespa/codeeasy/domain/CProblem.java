@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,5 +46,8 @@ public class CProblem {
 
     @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TestCase> testCases;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private BasicCode basicCode;
 
 }
