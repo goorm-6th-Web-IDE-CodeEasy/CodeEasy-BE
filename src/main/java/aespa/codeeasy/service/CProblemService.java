@@ -36,8 +36,8 @@ public class CProblemService {
         CProblemDto.setProblemContent(cProblem.getProblemContent());
         CProblemDto.setProblemInputContent(cProblem.getProblemInputContent());
         CProblemDto.setProblemOutputContent(cProblem.getProblemOutputContent());
-        CProblemDto.setAlgorithm(cProblem.getAlgorithm());
-        CProblemDto.setTier(cProblem.getTier());
+        CProblemDto.setAlgorithm(cProblem.getAlgorithm().toString());
+        CProblemDto.setTier(cProblem.getTier().toString());
         CProblemDto.setTimeLimit(cProblem.getTimeLimit());
         CProblemDto.setMemoryLimit(cProblem.getMemoryLimit());
         return CProblemDto;

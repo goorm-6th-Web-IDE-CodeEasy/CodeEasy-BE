@@ -1,7 +1,11 @@
 package aespa.codeeasy.domain;
 
+import aespa.codeeasy.domain.type.Algorithm;
+import aespa.codeeasy.domain.type.Tier;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,8 +28,11 @@ public class CProblem {
     private String problemInputContent;
     private String problemOutputContent;
 
-    private String algorithm;
-    private String tier;
+    @Enumerated(EnumType.STRING)
+    private Algorithm algorithm;
+
+    @Enumerated(EnumType.STRING)
+    private Tier tier;
 
     private Long timeLimit;
     private Long memoryLimit;
