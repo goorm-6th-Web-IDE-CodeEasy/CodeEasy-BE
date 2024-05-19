@@ -1,5 +1,6 @@
 package aespa.codeeasy.controller;
 
+import aespa.codeeasy.dto.BasicCodeDto;
 import aespa.codeeasy.dto.CProblemDto;
 import aespa.codeeasy.dto.CompileRequestDto;
 import aespa.codeeasy.dto.CompileResponseDto;
@@ -19,6 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class CProblemController {
 
     private final CProblemService problemService;
+
+    @GetMapping("/problem/{problemId}/default")
+    public ResponseEntity getBasicCode(@PathVariable("problemId") Long problemId) {
+        BasicCodeDto basicCodeDto = problemService.getBasicCode(problemId);
+        return ResponseEntity.ok().body(basicCodeDto);
+    }
 
     @GetMapping("/problem/{problemId}")
     public ResponseEntity<CProblemDto> getProblem(@PathVariable("problemId") Long problemId) {

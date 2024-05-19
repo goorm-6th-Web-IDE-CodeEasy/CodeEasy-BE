@@ -56,6 +56,8 @@ public class CProblemService {
         CProblemDto.setTier(cProblem.getTier().toString());
         CProblemDto.setTimeLimit(cProblem.getTimeLimit());
         CProblemDto.setMemoryLimit(cProblem.getMemoryLimit());
+        CProblemDto.setBasicInputTestCase(cProblem.getBasicInputTestCase());
+        CProblemDto.setBasicOutputTestCase(cProblem.getBasicOutputTestCase());
         return CProblemDto;
     }
 
