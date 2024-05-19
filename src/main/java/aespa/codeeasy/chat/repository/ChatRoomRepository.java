@@ -64,4 +64,26 @@ public class ChatRoomRepository {
     public ChatRoom findRoomById(String roomId) {
         return opsHashChatRoom.get(CHAT_ROOMS, roomId);
     }
+
+    public ChatRoom createChatRoom(String name) {
+        String roomId = name + "-" + System.currentTimeMillis();
+        ChatRoom chatRoom = ChatRoom.create(name);
+        chatRoom.setRoomId(roomId);
+        opsHashChatRoom.put(CHAT_ROOMS, roomId, chatRoom);
+        return chatRoom;
+    }
+
+    public List<ChatRoom> findAllRooms() {
+        return opsHashChatRoom.values(CHAT_ROOMS);
+    }
+
+    public void subscribeToRoom(String roomId) {
+        ChannelTopic topic = topics.get(roomId);
+        if (topic == null) {
+            topic = new ChannelTopic(roomId);
+            redisMessageListener.addMessageListener(redisSubscriber, topic);
+            topics.put(roomId, topic);
+        }
+    }
+
 }
