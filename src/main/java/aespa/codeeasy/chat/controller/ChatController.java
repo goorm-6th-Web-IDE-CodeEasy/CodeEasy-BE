@@ -5,18 +5,18 @@ import aespa.codeeasy.chat.pubsub.RedisPublisher;
 import aespa.codeeasy.chat.repository.ChatMessageRepository;
 import aespa.codeeasy.chat.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/api") // API 경로 설정
 public class ChatController {
 
     private final RedisPublisher redisPublisher;
@@ -38,13 +38,27 @@ public class ChatController {
 
     @GetMapping("/chats/search") // 추가: 검색 엔드포인트
     @ResponseBody
-    public List<ChatMessage> searchMessages(@RequestParam String keyword) {
-        return chatMessageRepository.findByMessageContaining(keyword);
+    public List<ChatMessage> searchMessages(@RequestParam(name = "keyword") String keyword) {
+        try {
+            return chatMessageRepository.findByMessageContaining(keyword);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error searching messages", e);
+        }
     }
 
     @GetMapping("/chats/messages/{roomId}")
     @ResponseBody
-    public List<ChatMessage> getMessages(@PathVariable String roomId) {
-        return chatMessageRepository.findByRoomId(roomId);
+    public List<ChatMessage> getMessages(@PathVariable(name = "roomId") String roomId) {
+        try {
+            List<ChatMessage> messages = chatMessageRepository.findByRoomId(roomId);
+            System.out.println("Messages fetched successfully for room: " + roomId);
+            return messages;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Error fetching messages", e);
+        }
     }
 }

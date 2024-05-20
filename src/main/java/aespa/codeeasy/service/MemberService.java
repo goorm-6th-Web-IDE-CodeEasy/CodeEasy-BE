@@ -1,18 +1,22 @@
 package aespa.codeeasy.service;
 
+import aespa.codeeasy.JKglobal.jwt.service.JwtService;
 import aespa.codeeasy.domain.Member;
 import aespa.codeeasy.domain.type.Role;
 import aespa.codeeasy.dto.*;
 import aespa.codeeasy.repository.MemberRepository;
 import aespa.codeeasy.repository.ProblemAnswerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -21,6 +25,7 @@ public class MemberService {
     private final MemberRepository memberRepository; // 회원 정보를 데이터베이스에서 관리하기 위한 JPA 리포지토리
     private final PasswordEncoder passwordEncoder;
     private final ProblemAnswerRepository problemAnswerRepository;
+    private final JwtService jwtService;
 
     /**
      * 사용자가 입력한 회원 아이디가 데이터베이스에 이미 존재하는지 확인합니다.
@@ -109,6 +114,23 @@ public class MemberService {
     public GrassResponseDto getGrassInfo(Long id, LocalDate date) {
         var problems = problemAnswerRepository.grassInfo(id, date);
         return new GrassResponseDto(id, date.toString(), problems);
+    }
+
+    public Member getUserFromToken(String token) {
+        log.info("token: {}", token);
+        String accessToken = token;
+        log.info("get_me_accesstoken: {}", accessToken);
+
+        // jwtService.extractEmail이 Optional<String>을 반환하므로 적절히 처리
+        Optional<String> emailOpt = jwtService.extractEmail(accessToken);
+
+        // emailOpt에서 값을 추출하고 값이 없으면 예외 발생
+        String email = emailOpt.orElseThrow(() -> new RuntimeException("유저의 이메일을 찾을 수 없습니다."));
+        log.info("email: {}", email);
+
+        // 이메일을 기반으로 멤버 조회
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("유저의 이메일을 찾을 수 없습니다. " + email));
     }
 }
 

@@ -68,4 +68,10 @@ public class MemberController {
     public String jwtTest() {
         return "jwtTest 요청 성공";
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<Member> getCurentUser(@RequestHeader("Authorization") String token) {
+        Member member = memberService.getUserFromToken(token);
+        return ResponseEntity.ok(member);
+    }
 }
