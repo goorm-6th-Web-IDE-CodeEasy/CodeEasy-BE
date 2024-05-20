@@ -100,9 +100,9 @@ public class CProblemService {
                 statusList.add(projectStatus);
                 if (outputTestCase.equals(codeResult)) {
                     correctCount++;
-                    dataList.add("correct answer.");
+                    dataList.add("correct answer.\n출력 결과: \n" + codeResult);
                 } else {
-                    dataList.add("wrong answer.");
+                    dataList.add("wrong answer.\n출력 결과: \n" + codeResult);
                 }
 
             } else {
@@ -142,9 +142,9 @@ public class CProblemService {
             statusList.add(projectStatus);
             if (basicOutputTestCase.equals(codeResult)) {
                 correctCount++;
-                dataList.add("correct answer.");
+                dataList.add("correct answer.\n출력 결과: \n" + codeResult);
             } else {
-                dataList.add("wrong answer.");
+                dataList.add("wrong answer.\n출력 결과: \n" + codeResult);
             }
 
         } else {
