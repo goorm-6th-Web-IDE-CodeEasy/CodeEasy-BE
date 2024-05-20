@@ -20,9 +20,11 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CProblemService {
 
     private final CProblemRepository problemRepository;
@@ -98,9 +100,9 @@ public class CProblemService {
                 statusList.add(projectStatus);
                 if (outputTestCase.equals(codeResult)) {
                     correctCount++;
-                    dataList.add("correct answer.");
+                    dataList.add("correct answer.\n출력 결과: \n" + codeResult);
                 } else {
-                    dataList.add("wrong answer.");
+                    dataList.add("wrong answer.\n출력 결과: \n" + codeResult);
                 }
 
             } else {
@@ -140,9 +142,9 @@ public class CProblemService {
             statusList.add(projectStatus);
             if (basicOutputTestCase.equals(codeResult)) {
                 correctCount++;
-                dataList.add("correct answer.");
+                dataList.add("correct answer.\n출력 결과: \n" + codeResult);
             } else {
-                dataList.add("wrong answer.");
+                dataList.add("wrong answer.\n출력 결과: \n" + codeResult);
             }
 
         } else {
